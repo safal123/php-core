@@ -32,7 +32,7 @@ function pwdMatch($password, $confirm_password)
 
 function emailExists($conn, $email)
 {
-    $sql = "SELECT * FROM users WHERE email = ?;";
+    $sql = "SELECT *  FROM users WHERE email = ?;";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../register.php?error=stmtfailed");
@@ -62,4 +62,26 @@ function createUser($conn, $name, $email, $password)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     header("location: ../register.php?success=signupsuccess");
+}
+
+function loginUser($conn, $email, $password)
+{
+    $user = emailExists($conn, $email);
+
+    if ($user === false) {
+        header("location: ../login.php?error=wrongEmailPassword");
+        exit();
+    }
+
+    $passwordHashed = $user['password'];
+    $checkPassword = password_verify($password, $passwordHashed);
+    if ($checkPassword === false) {
+        header("location: ../login.php?error=wrongEmailPassword");
+    } else if ($checkPassword === true) {
+        session_start();
+        $_SESSION["id"] = $user['id'];
+        $_SESSION["name"] = $user["name"];
+        $_SESSION["email"] = $user['email'];
+        header("location: ../home.php");
+    }
 }

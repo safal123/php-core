@@ -19,13 +19,13 @@ if (isset($_POST["submit"])) {
         exit();
     }
 
-    if (pwdMatch($password, $confirm_password) !== false) {
-        header("location: ../register.php?error=passwordMisMatch");
+    if (emailExists($conn, $email) !== false) {
+        header("location: ../register.php?error=emailTaken");
         exit();
     }
 
-    if (emailExists($conn, $email) !== false) {
-        header("location: ../register.php?error=emailTaken");
+    if (pwdMatch($password, $confirm_password) !== false) {
+        header("location: ../register.php?error=passwordMisMatch");
         exit();
     }
 
