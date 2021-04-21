@@ -19,9 +19,10 @@ require_once '../includes/dbh.inc.php';
             <?php
             if ($blog = findBlogById($conn, $_GET['id'])) {
                 echo '
-                    <h1>Titl: ' . $blog['title'] . ' <br/></h1>
+                    <h1>Title: ' . $blog['title'] . ' <br/></h1>
                     Description: ' . $blog['description'] . ' <br/>
-                    <a href="edit.php?id=' . $blog['id'] . '" class="btn btn-sm btn-info text-white">Edit</a>
+                    ' . ($blog['user_id'] === $_SESSION["id"] ?
+                    '<a href="edit.php?id=' . $blog['id'] . '" class="btn btn-sm btn-info text-white">Edit</a>' : '') . '
                 ';
             } else {
                 echo 'No blog found.';

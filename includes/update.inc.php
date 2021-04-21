@@ -1,5 +1,7 @@
 <?php
 session_start();
+var_dump($_POST);
+
 if (isset($_POST["submit"])) {
     $title = $_POST["title"];
     $description = $_POST["description"];

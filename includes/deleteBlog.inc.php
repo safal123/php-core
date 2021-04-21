@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 if (isset($_POST["submit"])) {
     $id = $_GET["id"];
     require_once 'functions.inc.php';

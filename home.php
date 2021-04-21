@@ -36,6 +36,8 @@ require_once 'includes/dbh.inc.php';
                     <?php
                     if ($blogs = allBlogs($conn)) {
                         foreach ($blogs as $blog) {
+                            $blogId = $blog[1];
+                            $userId = $_SESSION["id"];
                             echo '<tr>
                             <td>' . $blog[0] . '</td>
                             <td>' . findUserById($conn, $blog[1]) . '</td>
@@ -44,9 +46,12 @@ require_once 'includes/dbh.inc.php';
                             <td>' . $blog[4] . '</td>
                             <td class="d-flex">
                                 <a href="/blogs/view.php?id=' . $blog[0] . '" class="btn btn-primary btn-sm text-white mr-2">View<a/>
-                                <form action="/includes/deleteBlog.inc.php?id=' . $blog[0] . '" method="POST">
-                                    <button name="submit" type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                                ' . ($blogId === $userId ? '
+                                    <a href="/blogs/edit.php?id=' . $blog[0] . '" class="btn btn-info btn-sm text-white mr-2">Edit<a/>
+                                    <form action="/includes/deleteBlog.inc.php?id=' . $blog[0] . '" method="POST">
+                                        <button name="submit" type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                ' : '') . '
                             </td>
                         </tr>';
                         }
