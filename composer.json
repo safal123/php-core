@@ -1,5 +1,8 @@
 {
+    "name": "safal/safal",
+    "description": "Php blog app.",
     "require": {
-        "tamtamchik/simple-flash": "^2.0"
+        "tamtamchik/simple-flash": "^2.0",
+        "vlucas/phpdotenv": "^5.3"
     }
 }

@@ -28,8 +28,7 @@ if (!isset($_SESSION['email'])) {
                 </div>
                 <div class="form-group">
                     <div class="label">Description</div>
-                    <textarea name="description" id="description" cols="30" rows="10" class="form-control">
-                </textarea>
+                    <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
                 </div>
                 <button type="submit" name="submit" class="btn btn-primary">Create new blog</button>
             </form>

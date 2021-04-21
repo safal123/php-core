@@ -21,7 +21,7 @@ require_once 'includes/dbh.inc.php';
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-responsive">
+            <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <td scope="col">Id</td>
@@ -34,17 +34,17 @@ require_once 'includes/dbh.inc.php';
                 </thead>
                 <tbody>
                     <?php
-                    if (allBlogs($conn)) {
-                        foreach (allBlogs($conn) as $blogs) {
+                    if ($blogs = allBlogs($conn)) {
+                        foreach ($blogs as $blog) {
                             echo '<tr>
-                            <td>' . $blogs[0] . '</td>
-                            <td>' . findUserById($conn, $blogs[1]) . '</td>
-                            <td>' . $blogs[2] . '</td>
-                            <td>' . $blogs[3] . '</td>
-                            <td>' . $blogs[4] . '</td>
+                            <td>' . $blog[0] . '</td>
+                            <td>' . findUserById($conn, $blog[1]) . '</td>
+                            <td>' . $blog[2] . '</td>
+                            <td>' . $blog[3] . '</td>
+                            <td>' . $blog[4] . '</td>
                             <td class="d-flex">
-                                <a href="/blogs/view.php?id=' . $blogs[0] . '" class="btn btn-primary btn-sm text-white mr-2">View<a/>
-                                <form action="/includes/deleteBlog.inc.php?id=' . $blogs[0] . '" method="POST">
+                                <a href="/blogs/view.php?id=' . $blog[0] . '" class="btn btn-primary btn-sm text-white mr-2">View<a/>
+                                <form action="/includes/deleteBlog.inc.php?id=' . $blog[0] . '" method="POST">
                                     <button name="submit" type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
                             </td>

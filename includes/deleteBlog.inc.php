@@ -8,4 +8,5 @@ if (isset($_POST["submit"])) {
     deleteBlog($conn, $id);
 } else {
     header("location: ../home.php");
+    exit();
 }

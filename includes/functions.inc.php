@@ -178,3 +178,22 @@ function deleteBlog($conn, $id)
     flash()->warning('Blog deleted successfully.');
     header("location: ../home.php");
 }
+
+function updateBlog($conn, $id, $title, $description)
+{
+    $blog = findBlogById($conn, $id);
+    if ($blog) {
+        $sql = "UPDATE blogs SET title = ?, description = ? where id = ?;";
+        $stmt = mysqli_stmt_init($conn);
+        if (!mysqli_stmt_prepare($stmt, $sql)) {
+            header("location: /blogs/create.php?error=stmtfailed");
+        }
+        mysqli_stmt_bind_param($stmt, "sss", $title, $description, $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        flash()->success('Blog updated successfully.');
+        header("location: ../../home.php");
+    } else {
+        flash()->warning('Blog not found');
+    }
+}
