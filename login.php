@@ -24,14 +24,14 @@ if (isset($_SESSION['email'])) {
             ?>
         </div>
         <div class="card-body">
-            <form action="includes/login.inc.php" method="POST">
+            <form action="/includes/login.inc.php" method="POST">
                 <div class="form-group">
                     <label for="name">Email Address</label>
-                    <input type="email" name="email" class="form-control" placeholder="Email Address">
+                    <input type="email" name="email" value="pokharelsafal66@gmail.com" class="form-control" placeholder="Email Address">
                 </div>
                 <div class="form-group">
                     <label for="name">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" value="password" class="form-control" placeholder="Password">
                 </div>
                 <button type="submit" name="submit" class="btn btn-primary">Login</button>
             </form>
