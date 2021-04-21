@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '../../vendor/autoload.php';
+
 function emptyInput($name, $email, $password, $confirm_password)
 {
     if (empty($name) || empty($email) || empty($password) || empty($confirm_password)) {
@@ -36,7 +38,8 @@ function emailExists($conn, $email)
     $sql = "SELECT *  FROM users WHERE email = ?;";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
-        header("location: ../register.php?error=stmtfailed");
+        flash()->warning('Something went wrong.');
+        header("location: ../register.php");
     }
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
@@ -100,6 +103,7 @@ function createBlog($conn, $user_id, $title, $description)
     mysqli_stmt_bind_param($stmt, "sss", $user_id, $title, $description);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
+    flash()->success('New blog created successfully.');
     header("location: ../../home.php?success=createBlogSuccess");
 }
 
@@ -121,6 +125,27 @@ function allBlogs($conn)
 }
 
 // Check if user exists or not
+function findBlogById($conn, $id)
+{
+    $sql = "SELECT * FROM blogs WHERE id = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        flash()->warning('Something went wrong.');
+        header("location: ../home.php");
+    }
+    mysqli_stmt_bind_param($stmt, "s", $id);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    if ($row = mysqli_fetch_assoc($result)) {
+        return $row;
+    } else {
+        return false;
+    }
+    mysqli_stmt_close($stmt);
+}
+
+// Check if user exists or not
 function findUserById($conn, $id)
 {
     $sql = "SELECT name, email  FROM users WHERE id = ?;";
@@ -132,11 +157,24 @@ function findUserById($conn, $id)
     mysqli_stmt_execute($stmt);
 
     $result = mysqli_stmt_get_result($stmt);
-
     if ($row = mysqli_fetch_assoc($result)) {
         return $row['name'];
     } else {
         return false;
     }
     mysqli_stmt_close($stmt);
+}
+
+function deleteBlog($conn, $id)
+{
+    $sql = "DELETE FROM blogs WHERE id = ?;";
+    $stmt = mysqli_stmt_init($conn);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../home.php?error=stmtfailed");
+    }
+    mysqli_stmt_bind_param($stmt, "s", $id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    flash()->warning('Blog deleted successfully.');
+    header("location: ../home.php");
 }

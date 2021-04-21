@@ -1,5 +1,7 @@
-<?php session_start() ?>
-
+<?php
+session_start();
+require_once __DIR__ . '/vendor/autoload.php';
+?>
 <!doctype html>
 <html lang="en">
 
@@ -57,3 +59,8 @@
       </ul>
     </div>
   </nav>
+  <?php
+  if (isset($_SESSION['flash_messages'])) {
+    echo flash()->display();
+  }
+  ?>
