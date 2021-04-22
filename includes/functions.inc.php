@@ -109,7 +109,7 @@ function createBlog($conn, $user_id, $title, $description)
 
 function allBlogs($conn)
 {
-    $sql = "SELECT *  FROM blogs;";
+    $sql = "SELECT *  FROM blogs ORDER BY id desc;";
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../register.php?error=stmtfailed");
@@ -179,16 +179,16 @@ function deleteBlog($conn, $id)
     header("location: ../home.php");
 }
 
-function updateBlog($conn, $id, $title, $description)
+function updateBlog($conn, $id, $title, $description, $image)
 {
     $blog = findBlogById($conn, $id);
     if ($blog) {
-        $sql = "UPDATE blogs SET title = ?, description = ? where id = ?;";
+        $sql = "UPDATE blogs SET title = ?, description = ?, image = ? where id = ?;";
         $stmt = mysqli_stmt_init($conn);
         if (!mysqli_stmt_prepare($stmt, $sql)) {
             header("location: /blogs/create.php?error=stmtfailed");
         }
-        mysqli_stmt_bind_param($stmt, "sss", $title, $description, $id);
+        mysqli_stmt_bind_param($stmt, "ssss", $title, $description, $image, $id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         flash()->success('Blog updated successfully.');
@@ -196,4 +196,61 @@ function updateBlog($conn, $id, $title, $description)
     } else {
         flash()->warning('Blog not found');
     }
+}
+
+
+// Upload file
+function uploadFile($path, $file)
+{
+    $target_dir = "../public/{$path}/";
+    $target_file = $target_dir . basename($file["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    $message = [];
+
+    // Check if image is actual image or fake image
+    $check = getimagesize($file["tmp_name"]);
+    if ($check !== false) {
+        $uploadOk = 1;
+    } else {
+        $uploadOk = 0;
+        array_push($message, "This image cannot be uploaded.");
+        return $message;
+    }
+
+    // Check if image already exists
+    if (file_exists($target_file)) {
+        $uploadOk = 0;
+        array_push($message, "This image already exists");
+        return $message;
+    }
+
+    // Check file size
+    if ($file["size"] > 1000000) {
+        $uploadOk = 0;
+        array_push($message, "Image size is too big.");
+        return $message;
+    }
+
+    // Allow certain file formats
+    if (
+        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif"
+    ) {
+        $uploadOk = 0;
+        array_push($message, "Sorry, only JPG, JPEG, PNG & GIF files are allowed.");
+        return $message;
+    }
+
+    if ($uploadOk == 0) {
+        array_push($message, "Sorry, your image is not uploaded.");
+        return $message;
+    } else {
+        if (move_uploaded_file($file["tmp_name"], $target_file)) {
+            return true;
+        } else {
+            array_push($message, "Something went wrong.");
+        }
+    }
+    return $message;
 }

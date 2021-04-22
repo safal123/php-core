@@ -5,6 +5,13 @@ if (!isset($_SESSION['email'])) {
 }
 require_once 'includes/functions.inc.php';
 require_once 'includes/dbh.inc.php';
+$msg = "First line of text\nSecond line of text";
+
+// use wordwrap() if lines are longer than 70 characters
+$msg = wordwrap($msg, 70);
+
+// send email
+mail("pokharelsafal66@gmail.com", "My subject", $msg);
 ?>
 
 <div class="container">
@@ -28,6 +35,7 @@ require_once 'includes/dbh.inc.php';
                         <td scope="col">Author</td>
                         <td scope="col">Title</td>
                         <td scope="col">Description</td>
+                        <td scope="col">Image</td>
                         <td scope="col">Created At</td>
                         <td scope="col">Action</td>
                     </tr>
@@ -41,11 +49,11 @@ require_once 'includes/dbh.inc.php';
                             echo '<tr>
                             <td>' . $blog[0] . '</td>
                             <td>' . findUserById($conn, $blog[1]) . '</td>
-                            <td>' . $blog[2] . '</td>
+                            <td><a href="/blogs/view.php?id=' . $blog[0] . '">' . $blog[2] . '</a></td>
                             <td>' . $blog[3] . '</td>
                             <td>' . $blog[4] . '</td>
+                            <td><img class="img-fluid img-thumbnail" height="100" width="100" src="' . $blog[4] . '"></td>
                             <td class="d-flex">
-                                <a href="/blogs/view.php?id=' . $blog[0] . '" class="btn btn-primary btn-sm text-white mr-2">View<a/>
                                 ' . ($blogId === $userId ? '
                                     <a href="/blogs/edit.php?id=' . $blog[0] . '" class="btn btn-info btn-sm text-white mr-2">Edit<a/>
                                     <form action="/includes/deleteBlog.inc.php?id=' . $blog[0] . '" method="POST">
